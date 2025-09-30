@@ -122,9 +122,6 @@
                     <ge:EntityModelCheckBoxEditor ui:field="isScsiPassthroughEditor" label="{constants.isScsiPassthroughEditor}" removeFormGroup="true" usePatternFly="true" />
                 </b:Row>
                 <b:Row>
-                    <ge:EntityModelCheckBoxEditor ui:field="isSgIoUnfilteredEditor" label="{constants.isSgIoUnfilteredEditor}" removeFormGroup="true" usePatternFly="true" />
-                </b:Row>
-                <b:Row>
                     <ge:EntityModelCheckBoxEditor ui:field="isUsingScsiReservationEditor" label="{constants.isUsingScsiReservationEditor}" removeFormGroup="true" usePatternFly="true" addStyleNames="{style.withInfoIcon}" />
                     <d:InfoIcon ui:field="scsiReservationInfoIcon" addStyleNames="{style.floatInfoIcon}" visible="false"/>
                 </b:Row>

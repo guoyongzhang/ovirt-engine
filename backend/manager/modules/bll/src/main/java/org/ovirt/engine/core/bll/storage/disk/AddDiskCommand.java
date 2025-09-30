@@ -259,10 +259,6 @@ public class AddDiskCommand<T extends AddDiskParameters> extends AbstractDiskVmC
             }
         }
 
-        if (!validate(diskValidator.isUsingScsiReservationValid(getVm(), getDiskVmElement(), lunDisk))) {
-            return false;
-        }
-
         return true;
     }
 

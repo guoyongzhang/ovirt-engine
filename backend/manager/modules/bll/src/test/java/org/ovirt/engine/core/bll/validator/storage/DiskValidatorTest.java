@@ -139,26 +139,6 @@ public class DiskValidatorTest {
     }
 
     @Test
-    public void testIsUsingScsiReservationValidWhenSgioIsUnFiltered() {
-        setupForLun();
-
-        LunDisk lunDisk1 = createLunDisk(ScsiGenericIO.UNFILTERED);
-
-        assertThat(lunValidator.isUsingScsiReservationValid(createVM(), createDiskVmElementUsingScsiReserevation(), lunDisk1),
-                isValid());
-    }
-
-    @Test
-    public void testIsUsingScsiReservationValidWhenSgioIsFiltered() {
-        setupForLun();
-
-        LunDisk lunDisk1 = createLunDisk(ScsiGenericIO.FILTERED);
-
-        assertThat(lunValidator.isUsingScsiReservationValid(createVM(), createDiskVmElementUsingScsiReserevation(), lunDisk1),
-                failsWith(EngineMessage.ACTION_TYPE_FAILED_SGIO_IS_FILTERED));
-    }
-
-    @Test
     public void testDiskAttachedToVMValid() {
         VM vm = createVM();
         when(vmDao.getVmsListForDisk(any(), anyBoolean())).thenReturn(Collections.singletonList(vm));

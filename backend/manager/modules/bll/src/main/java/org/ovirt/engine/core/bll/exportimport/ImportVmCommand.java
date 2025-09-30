@@ -287,12 +287,6 @@ public class ImportVmCommand<T extends ImportVmParameters> extends ImportVmComma
             return Arrays.asList(EngineMessage.ACTION_TYPE_FAILED_DISK_LUN_INVALID);
         }
 
-        ValidationResult usingScsiReservationResult = diskValidator.isUsingScsiReservationValid(getVm(),
-                lunDisk.getDiskVmElementForVm(getVmId()),
-                lunDisk);
-        if (!usingScsiReservationResult.isValid()) {
-            return usingScsiReservationResult.getMessages();
-        }
         return Collections.emptyList();
     }
 

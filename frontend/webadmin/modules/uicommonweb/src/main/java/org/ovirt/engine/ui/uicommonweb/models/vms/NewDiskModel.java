@@ -82,8 +82,8 @@ public class NewDiskModel extends AbstractDiskModel {
             getDiskInterface().setIsAvailable(false);
             getPassDiscard().setIsAvailable(false);
 
-            // set using scsi reservation to be invisible
-            getIsUsingScsiReservation().setIsAvailable(false);
+            // set using scsi reservation to be visible
+            getIsUsingScsiReservation().setIsAvailable(true);
             getIsUsingScsiReservation().setEntity(false);
         }
 

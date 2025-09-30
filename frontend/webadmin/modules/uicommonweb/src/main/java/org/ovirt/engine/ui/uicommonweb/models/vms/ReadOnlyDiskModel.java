@@ -3,7 +3,6 @@ package org.ovirt.engine.ui.uicommonweb.models.vms;
 import org.ovirt.engine.core.common.businessentities.StoragePool;
 import org.ovirt.engine.core.common.businessentities.storage.DiskImage;
 import org.ovirt.engine.core.common.businessentities.storage.DiskStorageType;
-import org.ovirt.engine.core.common.businessentities.storage.ScsiGenericIO;
 import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
 import org.ovirt.engine.ui.uicompat.IFrontendActionAsyncCallback;
 
@@ -19,7 +18,6 @@ public class ReadOnlyDiskModel extends EditVmDiskModel {
         getIsShareable().setEntity(getDisk().isShareable());
         getIsWipeAfterDelete().setEntity(getDisk().isWipeAfterDelete());
         getIsScsiPassthrough().setEntity(getDisk().isScsiPassthrough());
-        getIsSgIoUnfiltered().setEntity(getDisk().getSgio() == ScsiGenericIO.UNFILTERED);
         getIsReadOnly().setEntity(getVm() != null && getDiskVmElement().isReadOnly());
 
         switch (getDisk().getDiskStorageType()) {

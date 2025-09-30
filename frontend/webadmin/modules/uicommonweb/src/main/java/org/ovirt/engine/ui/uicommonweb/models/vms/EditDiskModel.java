@@ -10,7 +10,6 @@ import org.ovirt.engine.core.common.businessentities.storage.DiskStorageType;
 import org.ovirt.engine.core.common.businessentities.storage.DiskVmElement;
 import org.ovirt.engine.core.common.businessentities.storage.LunDisk;
 import org.ovirt.engine.core.common.businessentities.storage.ManagedBlockStorageDisk;
-import org.ovirt.engine.core.common.businessentities.storage.ScsiGenericIO;
 import org.ovirt.engine.core.common.businessentities.storage.StorageType;
 import org.ovirt.engine.core.common.businessentities.storage.VolumeFormat;
 import org.ovirt.engine.core.common.config.ConfigValues;
@@ -38,7 +37,6 @@ public class EditDiskModel extends AbstractDiskModel {
         getIsShareable().setEntity(getDisk().isShareable());
         getIsWipeAfterDelete().setEntity(getDisk().isWipeAfterDelete());
         getIsScsiPassthrough().setEntity(getDisk().isScsiPassthrough());
-        getIsSgIoUnfiltered().setEntity(getDisk().getSgio() == ScsiGenericIO.UNFILTERED);
         getIsBootable().setIsAvailable(false);
         getDiskInterface().setIsAvailable(false);
 

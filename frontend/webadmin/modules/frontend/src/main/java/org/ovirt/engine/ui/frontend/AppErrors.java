@@ -335,8 +335,6 @@ public interface AppErrors extends ConstantsWithLookup {
 
     String ACTION_TYPE_FAILED_VMS_NOT_RUNNING_ON_SINGLE_CLUSTER();
 
-    String ACTION_TYPE_FAILED_SGIO_IS_FILTERED();
-
     String VM_PINNED_TO_HOST_CANNOT_RUN_ON_THE_DEFAULT_VDS();
 
     String HOST_NAME_NOT_AVAILABLE();

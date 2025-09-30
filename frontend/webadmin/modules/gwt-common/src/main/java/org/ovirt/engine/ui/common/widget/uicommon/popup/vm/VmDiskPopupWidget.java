@@ -164,11 +164,6 @@ public class VmDiskPopupWidget extends AbstractModelBoundPopupWidget<AbstractDis
     EntityModelCheckBoxEditor isScsiPassthroughEditor;
 
     @UiField(provided = true)
-    @Path("isSgIoUnfiltered.entity")
-    @WithElementId("isSgIoUnfiltered")
-    EntityModelCheckBoxEditor isSgIoUnfilteredEditor;
-
-    @UiField(provided = true)
     @Path("isIncrementalBackup.entity")
     @WithElementId("isIncrementalBackup")
     EntityModelCheckBoxEditor isIncrementalBackupEditor;
@@ -250,7 +245,6 @@ public class VmDiskPopupWidget extends AbstractModelBoundPopupWidget<AbstractDis
         passDiscardEditor = new EntityModelCheckBoxEditor(Align.RIGHT);
         isUsingScsiReservationEditor = new EntityModelCheckBoxEditor(Align.RIGHT);
         isScsiPassthroughEditor = new EntityModelCheckBoxEditor(Align.RIGHT);
-        isSgIoUnfilteredEditor = new EntityModelCheckBoxEditor(Align.RIGHT);
         isIncrementalBackupEditor = new EntityModelCheckBoxEditor(Align.RIGHT);
 
         hostInfoIcon = new InfoIcon(SafeHtmlUtils.fromString(constants.hostToUseToolTip()));
@@ -476,7 +470,6 @@ public class VmDiskPopupWidget extends AbstractModelBoundPopupWidget<AbstractDis
         isReadOnlyEditor.setTabIndex(nextTabIndex++);
         passDiscardEditor.setTabIndex(nextTabIndex++);
         isScsiPassthroughEditor.setTabIndexes(nextTabIndex++);
-        isSgIoUnfilteredEditor.setTabIndex(nextTabIndex++);
         isUsingScsiReservationEditor.setTabIndex(nextTabIndex++);
         isIncrementalBackupEditor.setTabIndex(nextTabIndex++);
 

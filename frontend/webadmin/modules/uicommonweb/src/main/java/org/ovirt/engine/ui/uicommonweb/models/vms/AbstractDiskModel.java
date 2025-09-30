@@ -70,7 +70,6 @@ public abstract class AbstractDiskModel extends DiskModel {
     private EntityModel<Boolean> isDirectLunDiskAvaialable;
     private EntityModel<Boolean> isUsingScsiReservation;
     private EntityModel<Boolean> isScsiPassthrough;
-    private EntityModel<Boolean> isSgIoUnfiltered;
     private EntityModel<Boolean> isIncrementalBackup;
     private EntityModel<String> sizeExtend;
     private EntityModel<DiskStorageType> diskStorageType;
@@ -145,14 +144,6 @@ public abstract class AbstractDiskModel extends DiskModel {
 
     public void setIsScsiPassthrough(EntityModel<Boolean> isScsiPassthrough) {
         this.isScsiPassthrough = isScsiPassthrough;
-    }
-
-    public EntityModel<Boolean> getIsSgIoUnfiltered() {
-        return isSgIoUnfiltered;
-    }
-
-    public void setIsSgIoUnfiltered(EntityModel<Boolean> isSgIoUnfiltered) {
-        this.isSgIoUnfiltered = isSgIoUnfiltered;
     }
 
     public EntityModel<Boolean> getIsIncrementalBackup() {
@@ -266,11 +257,6 @@ public abstract class AbstractDiskModel extends DiskModel {
         getIsScsiPassthrough().setIsAvailable(false);
         getIsScsiPassthrough().setEntity(false);
         getIsScsiPassthrough().getEntityChangedEvent().addListener(this);
-
-        setIsSgIoUnfiltered(new EntityModel<>());
-        getIsSgIoUnfiltered().setIsAvailable(false);
-        getIsSgIoUnfiltered().setEntity(false);
-        getIsSgIoUnfiltered().getEntityChangedEvent().addListener(this);
 
         // Incremental backup flag should be enabled by default (BZ 1915029)
         setIsIncrementalBackup(new EntityModel<>());
@@ -695,7 +681,6 @@ public abstract class AbstractDiskModel extends DiskModel {
     private void DiskInterface_SelectedItemChanged() {
         boolean isLunDisk = getDiskStorageType().getEntity() == DiskStorageType.LUN;
         DiskInterface diskInterface = getDiskInterface().getSelectedItem();
-        getIsSgIoUnfiltered().setIsAvailable(isLunDisk && DiskInterface.VirtIO_SCSI.equals(diskInterface));
         getIsScsiPassthrough().setIsAvailable(isLunDisk && DiskInterface.VirtIO_SCSI.equals(diskInterface));
         getIsUsingScsiReservation().setIsAvailable(isLunDisk && DiskInterface.VirtIO_SCSI.equals(diskInterface));
         getIsReadOnly().setIsAvailable(diskInterface != DiskInterface.IDE && diskInterface != DiskInterface.SATA);
@@ -790,35 +775,10 @@ public abstract class AbstractDiskModel extends DiskModel {
     protected void updateScsiPassthroughChangeability() {
         getIsScsiPassthrough().setIsChangeable(!getIsReadOnly().getEntity() && isEditEnabled());
         getIsScsiPassthrough().setChangeProhibitionReason(constants.cannotEnableScsiPassthroughForLunReadOnlyDisk());
-        updateSgIoUnfilteredChangeability();
-    }
-
-    protected void updateSgIoUnfilteredChangeability() {
-        if (!getIsScsiPassthrough().getEntity()) {
-            getIsSgIoUnfiltered().setIsChangeable(false, constants.cannotEnableSgioWhenScsiPassthroughDisabled());
-            getIsSgIoUnfiltered().setEntity(false);
-            return;
-        }
-        getIsSgIoUnfiltered().setIsChangeable(isEditEnabled());
-        if (isEditEnabled()) {
-            getIsSgIoUnfiltered().setChangeProhibitionReason(null);
-        }
     }
 
     protected void updateScsiReservationChangeability() {
-        boolean isSgioUnfiltered = getIsSgIoUnfiltered().getEntity();
-        if (getVm() != null) {
-            if (isSgioUnfiltered) {
-                getIsUsingScsiReservation().setIsChangeable(true);
-            } else {
-                getIsUsingScsiReservation().setIsChangeable(false);
-                getIsUsingScsiReservation().setEntity(false);
-            }
-        } else {
-            getIsUsingScsiReservation().setIsAvailable(false);
-            getIsUsingScsiReservation().setEntity(false);
-            getIsUsingScsiReservation().setIsChangeable(false);
-        }
+        getIsUsingScsiReservation().setIsChangeable(!getIsReadOnly().getEntity() && isEditEnabled());
     }
 
     protected void updateReadOnlyChangeability() {
@@ -1036,9 +996,7 @@ public abstract class AbstractDiskModel extends DiskModel {
                 LunDisk lunDisk = getLunDisk();
                 DiskInterface diskInterface = getDiskInterface().getSelectedItem();
                 if (DiskInterface.VirtIO_SCSI.equals(diskInterface)) {
-                    lunDisk.setSgio(!getIsScsiPassthrough().getEntity() ? null :
-                            getIsSgIoUnfiltered().getEntity() ?
-                                    ScsiGenericIO.UNFILTERED : ScsiGenericIO.FILTERED);
+                    lunDisk.setSgio(!getIsScsiPassthrough().getEntity() ? null : ScsiGenericIO.FILTERED);
                     if (!getIsFloating()) {
                         getDiskVmElement().setUsingScsiReservation(getIsUsingScsiReservation().getEntity());
                     }
@@ -1115,11 +1073,7 @@ public abstract class AbstractDiskModel extends DiskModel {
                 updateScsiPassthroughChangeability();
             } else if (sender == getIsScsiPassthrough()) {
                 updateScsiPassthroughChangeability();
-                updateSgIoUnfilteredChangeability();
                 updateReadOnlyChangeability();
-                updateScsiReservationChangeability();
-            } else if (sender == getIsSgIoUnfiltered()) {
-                updateScsiReservationChangeability();
             } else if (sender == getDiskStorageType()) {
                 diskStorageType_EntityChanged();
             } else if (sender == getIsWipeAfterDelete()) {

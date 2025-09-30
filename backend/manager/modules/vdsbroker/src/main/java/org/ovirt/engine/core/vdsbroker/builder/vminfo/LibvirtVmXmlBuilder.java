@@ -2210,7 +2210,7 @@ public class LibvirtVmXmlBuilder {
         writeAddress(device);
         writeBootOrder(device.getBootOrder());
 
-        if (disk.getDiskStorageType() != DiskStorageType.LUN || !disk.isScsiPassthrough()) {
+        if (disk.getDiskStorageType() != DiskStorageType.LUN) {
             writer.writeElement("serial", disk.getId().toString());
         }
 
@@ -2555,9 +2555,14 @@ public class LibvirtVmXmlBuilder {
 
         switch (dve.getDiskInterface()) {
             case VirtIO_SCSI:
-                if (disk.getDiskStorageType() == DiskStorageType.LUN && disk.isScsiPassthrough()) {
-                    writer.writeAttributeString("device", VmDeviceType.LUN.getName());
-                    writer.writeAttributeString("sgio", disk.getSgio().toString().toLowerCase());
+                if (disk.getDiskStorageType() == DiskStorageType.LUN) {
+                    if (disk.isScsiPassthrough() ||
+                            FeatureSupported.isScsiReservationSupported(vm.getCompatibilityVersion()) && dve.isUsingScsiReservation()) {
+                        writer.writeAttributeString("device", VmDeviceType.LUN.getName());
+                        if (disk.getSgio() != null) {
+                            writer.writeAttributeString("sgio", disk.getSgio().toString().toLowerCase());
+                        }
+                    }
                     break;
                 }
             default:

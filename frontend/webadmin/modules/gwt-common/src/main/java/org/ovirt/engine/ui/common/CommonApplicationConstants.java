@@ -991,8 +991,6 @@ public interface CommonApplicationConstants extends Constants {
 
     String isScsiPassthroughEditor();
 
-    String isSgIoUnfilteredEditor();
-
     String activateVmDiskPopup();
 
     String activateVmDiskPopupToolTip();

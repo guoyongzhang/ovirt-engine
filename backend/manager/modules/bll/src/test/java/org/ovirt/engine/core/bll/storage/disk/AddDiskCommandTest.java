@@ -560,19 +560,6 @@ public class AddDiskCommandTest extends BaseCommandTest {
     }
 
     @Test
-    public void testIscsiLunCannotBeAddedIfSgioIsFilteredAndScsiReservationEnabled() {
-        LunDisk disk = createISCSILunDisk(ScsiGenericIO.FILTERED);
-        command.getParameters().setDiskInfo(disk);
-        command.getParameters().getDiskVmElement().setUsingScsiReservation(true);
-        mockVm();
-        mockInterfaceList();
-        assertFalse(command.checkIfLunDiskCanBeAdded(spyDiskValidator(disk)),
-                "Lun disk added successfully WHILE sgio is filtered and scsi reservation is enabled");
-        ValidateTestUtils.assertValidationMessages("checkIfLunDiskCanBeAdded() failed but correct can do action hasn't been added to the return response",
-                command, EngineMessage.ACTION_TYPE_FAILED_SGIO_IS_FILTERED);
-    }
-
-    @Test
     public void testIscsiLunCanBeAddedIfScsiPassthroughEnabledAndScsiReservationEnabled() {
         LunDisk disk = createISCSILunDisk(ScsiGenericIO.UNFILTERED);
         command.getParameters().setDiskInfo(disk);
