@@ -42,6 +42,7 @@ import org.ovirt.engine.api.resource.VmNumaNodesResource;
 import org.ovirt.engine.api.resource.VmReportedDevicesResource;
 import org.ovirt.engine.api.resource.VmResource;
 import org.ovirt.engine.api.resource.VmSessionsResource;
+import org.ovirt.engine.api.resource.VmVmDevicesResource;
 import org.ovirt.engine.api.resource.VmWatchdogsResource;
 import org.ovirt.engine.api.resource.externalhostproviders.KatelloErrataResource;
 import org.ovirt.engine.api.restapi.logging.Messages;
@@ -807,6 +808,11 @@ public class BackendVmResource
     @Override
     public VmHostDevicesResource getHostDevicesResource() {
         return inject(new BackendVmHostDevicesResource(guid));
+    }
+
+    @Override
+    public VmVmDevicesResource getVmDevicesResource() {
+        return inject(new BackendVmDevicesResource(guid));
     }
 
     @Override
