@@ -775,10 +775,16 @@ public abstract class AbstractDiskModel extends DiskModel {
     protected void updateScsiPassthroughChangeability() {
         getIsScsiPassthrough().setIsChangeable(!getIsReadOnly().getEntity() && isEditEnabled());
         getIsScsiPassthrough().setChangeProhibitionReason(constants.cannotEnableScsiPassthroughForLunReadOnlyDisk());
+        updateScsiReservationChangeability();
     }
 
     protected void updateScsiReservationChangeability() {
-        getIsUsingScsiReservation().setIsChangeable(!getIsReadOnly().getEntity() && isEditEnabled());
+        if (!getIsScsiPassthrough().getEntity()) {
+            getIsUsingScsiReservation().setIsChangeable(false);
+            getIsUsingScsiReservation().setEntity(false);
+            return;
+        }
+        getIsUsingScsiReservation().setIsChangeable(isEditEnabled());
     }
 
     protected void updateReadOnlyChangeability() {
@@ -1074,6 +1080,7 @@ public abstract class AbstractDiskModel extends DiskModel {
             } else if (sender == getIsScsiPassthrough()) {
                 updateScsiPassthroughChangeability();
                 updateReadOnlyChangeability();
+                updateScsiReservationChangeability();
             } else if (sender == getDiskStorageType()) {
                 diskStorageType_EntityChanged();
             } else if (sender == getIsWipeAfterDelete()) {
